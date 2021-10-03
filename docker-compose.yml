@@ -138,7 +138,9 @@ volumes:
   saleor-redis:
     driver: local
   saleor-media:
+    driver: local
   saleor-traefik:
+    driver: local
 
 networks:
   saleor-backend-tier:
