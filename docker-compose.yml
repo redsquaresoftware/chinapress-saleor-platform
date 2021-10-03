@@ -123,7 +123,6 @@ services:
     build:
       context: .
       dockerfile: ./traefik/Dockerfile
-    image: chinapress_saleor_traefik
     depends_on:
       - api
     volumes:
