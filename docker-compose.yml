@@ -1,19 +1,6 @@
 version: "2"
 
 services:
-  traefik:
-    build:
-      context: .
-      dockerfile: ./traefik/Dockerfile
-    image: chinapress_saleor_traefik
-    depends_on:
-      - api
-    volumes:
-      - saleor-traefik:/etc/traefik/acme
-    ports:
-      - "0.0.0.0:80:80"
-      - "0.0.0.0:443:443"
-
   api:
     ports:
       - 8000:8000
@@ -131,6 +118,19 @@ services:
     restart: unless-stopped
     networks:
       - saleor-backend-tier
+
+  traefik:
+    build:
+      context: .
+      dockerfile: ./traefik/Dockerfile
+    image: chinapress_saleor_traefik
+    depends_on:
+      - api
+    volumes:
+      - saleor-traefik:/etc/traefik/acme
+    ports:
+      - "0.0.0.0:80:80"
+      - "0.0.0.0:443:443"
 
 volumes:
   saleor-db:
