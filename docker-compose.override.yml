@@ -7,7 +7,7 @@ services:
       traefik.http.routers.saleor-api.entrypoints: https
       traefik.http.routers.saleor-api.rule: Host(`saleor-api.saleor.mywheels.com.my`)
       traefik.http.routers.saleor-api.service: saleor-api
-      traefik.http.services.saleor-api.loadbalancer.server.port: 8000
+      traefik.http.services.saleor-api.loadbalancer.server.port: 80
       traefik.docker.network: web
     networks:
       web:
