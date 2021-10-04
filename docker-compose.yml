@@ -22,7 +22,7 @@ services:
       - ./saleor/tests/:/app/tests
       # shared volume between worker and api for media
       - saleor-media:/app/media
-    command: gunicorn --bind 0.0.0.0:8000 --workers 4 --worker-class uvicorn.workers.UvicornWorker saleor.asgi:application
+    command: python manage.py runserver 0.0.0.0:8000
     env_file: common.env
     environment:
       - JAEGER_AGENT_HOST=jaeger
