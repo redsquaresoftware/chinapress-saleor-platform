@@ -12,27 +12,27 @@ services:
     networks:
       web:
 
-  storefront:
-    labels:
-      traefik.enable: true
-      traefik.http.routers.saleor-store.entrypoints: https
-      traefik.http.routers.saleor-store.rule: Host(`saleor-store.saleor.mywheels.com.my`)
-      traefik.http.routers.saleor-store.service: saleor-store
-      traefik.http.services.saleor-store.loadbalancer.server.port: 80
-      traefik.docker.network: web
-    networks:
-      web:
+  # storefront:
+  #   labels:
+  #     traefik.enable: true
+  #     traefik.http.routers.saleor-store.entrypoints: https
+  #     traefik.http.routers.saleor-store.rule: Host(`saleor-store.saleor.mywheels.com.my`)
+  #     traefik.http.routers.saleor-store.service: saleor-store
+  #     traefik.http.services.saleor-store.loadbalancer.server.port: 80
+  #     traefik.docker.network: web
+  #   networks:
+  #     web:
 
-  dashboard:
-    labels:
-      traefik.enable: true
-      traefik.http.routers.saleor-admin.entrypoints: https
-      traefik.http.routers.saleor-admin.rule: Host(`saleor-admin.saleor.mywheels.com.my`)
-      traefik.http.routers.saleor-admin.service: saleor-admin
-      traefik.http.services.saleor-admin.loadbalancer.server.port: 80
-      traefik.docker.network: web
-    networks:
-      web:
+  # dashboard:
+  #   labels:
+  #     traefik.enable: true
+  #     traefik.http.routers.saleor-admin.entrypoints: https
+  #     traefik.http.routers.saleor-admin.rule: Host(`saleor-admin.saleor.mywheels.com.my`)
+  #     traefik.http.routers.saleor-admin.service: saleor-admin
+  #     traefik.http.services.saleor-admin.loadbalancer.server.port: 80
+  #     traefik.docker.network: web
+  #   networks:
+  #     web:
 
   jaeger:
     labels:
