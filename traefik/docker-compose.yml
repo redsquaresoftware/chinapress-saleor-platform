@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  traefik:
+    image: traefik:v2.2.1
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - web
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./data/traefik.yml:/traefik.yml:ro
+      - ./data/acme.json:/acme.json
+      - ./data/config.yml:/config.yml:ro
+    labels:
+      traefik.enable: true
+      traefik.http.routers.traefik.entrypoints: https
+      traefik.http.routers.traefik.rule: Host(`traefik.saleor.mywheels.com.my`)
+      traefik.http.middlewares.traefik-auth.basicauth.users: admin:password
+      traefik.http.routers.traefik.middlewares: traefik-auth
+      traefik.http.routers.traefik.service: api@internal
+    tty: true
+
+networks:
+  web:
+    external: true

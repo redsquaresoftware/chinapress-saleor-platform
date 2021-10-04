@@ -1,67 +1,43 @@
 log:
   level: INFO
 
+api:
+  dashboard: true
+  debug: true
+
 entryPoints:
-  web:
-    # http
+  http:
     address: ":80"
-
-  web-secure:
-    # https
+    http:
+      redirections:
+        entrypoint:
+          to: https
+  https:
     address: ":443"
-
-certificatesResolvers:
-  letsencrypt:
-    # https://docs.traefik.io/master/https/acme/#lets-encrypt
-    acme:
-      email: "cheewoei@redsquare.software"
-      storage: /etc/traefik/acme/acme.json
-      # https://docs.traefik.io/master/https/acme/#httpchallenge
-      httpChallenge:
-        entryPoint: web
-
-http:
-  routers:
-    web-router:
-      rule: "Host(`saleor.mywheels.com.my`)"
-      entryPoints:
-        - web
+    http:
       middlewares:
-        # - redirect
-        - csrf
-      service: api
-
-    web-secure-router:
-      rule: "Host(`saleor.mywheels.com.my`)"
-      entryPoints:
-        - web-secure
-      middlewares:
-        - csrf
-      service: api
+        - default-headers@file
       tls:
-        # https://docs.traefik.io/master/routing/routers/#certresolver
-        certResolver: letsencrypt
-
-  middlewares:
-    redirect:
-      # https://docs.traefik.io/master/middlewares/redirectscheme/
-      redirectScheme:
-        scheme: https
-        permanent: true
-    csrf:
-      # https://docs.traefik.io/master/middlewares/headers/#hostsproxyheaders
-      # https://docs.djangoproject.com/en/dev/ref/csrf/#ajax
-      headers:
-        hostsProxyHeaders: ["X-CSRFToken"]
-
-  services:
-    api:
-      loadBalancer:
-        servers:
-          - url: http://api:8000
-
+        certResolver: domain
+        domains:
+          - main: saleor.mywheels.com.my
+            sans:
+              - "*.saleor.mywheels.com.my"
+              
 providers:
-  # https://docs.traefik.io/master/providers/file/
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
   file:
-    filename: /etc/traefik/traefik.yml
-    watch: true
+    filename: /config.yml
+    
+certificatesResolvers:
+  domain:
+    acme:
+      email: info@domain.com
+      storage: acme.json
+      dnsChallenge:
+        provider: domain
+        resolvers:
+          - "1.1.1.1:53"
+          - "8.8.8.8:53"

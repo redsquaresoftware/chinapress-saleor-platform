@@ -1,6 +1,7 @@
-version: "2"
+version: '2.1'
 
 services:
+
   api:
     ports:
       - 8000:8000
@@ -8,7 +9,7 @@ services:
       context: ./saleor
       dockerfile: ./Dockerfile
       args:
-        STATIC_URL: "/static/"
+        STATIC_URL: '/static/'
     restart: unless-stopped
     networks:
       - saleor-backend-tier
@@ -26,8 +27,8 @@ services:
     env_file: common.env
     environment:
       - JAEGER_AGENT_HOST=jaeger
-      - STOREFRONT_URL=http://localhost:3000/
-      - DASHBOARD_URL=http://localhost:9000/
+      # - STOREFRONT_URL=https://saleor-store.domain.com/
+      # - DASHBOARD_URL=https://saleor-admin.domain.com/
 
   # storefront:
   #   build:
@@ -39,7 +40,10 @@ services:
   #   volumes:
   #     - ./saleor-storefront/:/app:cached
   #     - /app/node_modules/
-  #   command: npm start -- --host 0.0.0.0
+  #   environment:
+  #     - API_URI=https://saleor-api.domain.com/graphql/
+  #     - ALLOWED_CLIENT_HOSTS=domain.com
+  #     - ALLOWED_HOSTS=domain.com
 
   # dashboard:
   #   build:
@@ -51,7 +55,10 @@ services:
   #   volumes:
   #     - ./saleor-dashboard/:/app:cached
   #     - /app/node_modules/
-  #   command: npm start -- --host 0.0.0.0
+  #   environment:
+  #     - API_URI=https://saleor-api.domain.com/graphql/
+  #     - ALLOWED_CLIENT_HOSTS=domain.com
+  #     - ALLOWED_HOSTS=domain.com
 
   db:
     image: library/postgres:11.1-alpine
@@ -64,7 +71,7 @@ services:
       - saleor-db:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=saleor
-      - POSTGRES_PASSWORD=saleor
+      - POSTGRES_PASSWORD=password
 
   redis:
     image: library/redis:5.0-alpine
@@ -81,8 +88,8 @@ services:
       context: ./saleor
       dockerfile: ./Dockerfile
       args:
-        STATIC_URL: "/static/"
-    command: celery -A saleor --app=saleor.celeryconf:app worker --loglevel=info -B
+        STATIC_URL: '/static/'
+    command: celery -A saleor --app=saleor.celeryconf:app worker --loglevel=info
     restart: unless-stopped
     networks:
       - saleor-backend-tier
@@ -95,6 +102,8 @@ services:
       - ./saleor/templates/:/app/templates:Z,cached
       # shared volume between worker and api for media
       - saleor-media:/app/media
+    environment:
+      - EMAIL_URL=smtp://mailhog:1025
 
   jaeger:
     image: jaegertracing/all-in-one
@@ -119,25 +128,12 @@ services:
     networks:
       - saleor-backend-tier
 
-  traefik:
-    build:
-      context: ./traefik
-      dockerfile: ./Dockerfile
-    depends_on:
-      - api
-    volumes:
-      - saleor-traefik:/etc/traefik/acme
-    ports:
-      - "0.0.0.0:80:80"
-      - "0.0.0.0:443:443"
-
 volumes:
   saleor-db:
     driver: local
   saleor-redis:
     driver: local
-  saleor-media: {}
-  saleor-traefik: {}
+  saleor-media:
 
 networks:
   saleor-backend-tier:
