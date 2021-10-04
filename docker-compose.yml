@@ -2,8 +2,8 @@ version: "2"
 
 services:
   api:
-    # ports:
-    #   - 8000:8000
+    ports:
+      - 8000:8000
     build:
       context: ./saleor
       dockerfile: ./Dockerfile
