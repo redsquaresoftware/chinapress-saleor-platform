@@ -27,7 +27,7 @@ http:
       entryPoints:
         - web
       middlewares:
-        # - redirect
+        - redirect
         - csrf
       service: api
 
