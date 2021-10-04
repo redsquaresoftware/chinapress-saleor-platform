@@ -58,7 +58,7 @@ http:
     api:
       loadBalancer:
         servers:
-          - url: http://api:8000
+          - url: http://0.0.0.0:8000
 
 providers:
   # https://docs.traefik.io/master/providers/file/
