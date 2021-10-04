@@ -1,4 +1,4 @@
-version: "3"
+version: "2"
 
 services:
   api:
@@ -128,7 +128,7 @@ services:
     volumes:
       - saleor-traefik:/etc/traefik/acme
     ports:
-      - "0.0.0.0:80:80"
+      - "0.0.0.0:8000:80"
       - "0.0.0.0:443:443"
 
 volumes:
