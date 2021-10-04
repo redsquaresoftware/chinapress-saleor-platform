@@ -54,7 +54,7 @@ http:
       headers:
         hostsProxyHeaders: ["X-CSRFToken"]
 
-  services:
+  service:
     api:
       loadBalancer:
         servers:
