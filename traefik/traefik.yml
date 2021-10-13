@@ -71,12 +71,7 @@ http:
       loadBalancer:
         servers:
           - url: http://api:8000
-
-    db:
-      loadBalancer:
-        servers:
-          - url: http://db:5432
-
+          
 providers:
   # https://docs.traefik.io/master/providers/file/
   file:
