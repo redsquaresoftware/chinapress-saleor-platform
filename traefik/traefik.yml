@@ -10,6 +10,9 @@ entryPoints:
     # https
     address: ":443"
 
+  db:
+    address: ":5432"
+
 certificatesResolvers:
   letsencrypt:
     # https://docs.traefik.io/master/https/acme/#lets-encrypt
@@ -42,6 +45,12 @@ http:
         # https://docs.traefik.io/master/routing/routers/#certresolver
         certResolver: letsencrypt
 
+    db-secure-router:
+      rule: "Host(`saleor.mywheels.com.my`)"
+      entryPoints:
+        - db
+      service: db
+
   middlewares:
     redirect:
       # https://docs.traefik.io/master/middlewares/redirectscheme/
@@ -59,6 +68,11 @@ http:
       loadBalancer:
         servers:
           - url: http://api:8000
+
+    api:
+      loadBalancer:
+        servers:
+          - url: http://db:5432
 
 providers:
   # https://docs.traefik.io/master/providers/file/
