@@ -55,8 +55,6 @@ services:
 
   db:
     image: library/postgres:11.1-alpine
-    ports:
-      - 5432:5432
     restart: unless-stopped
     networks:
       - saleor-backend-tier
@@ -125,11 +123,13 @@ services:
       dockerfile: ./Dockerfile
     depends_on:
       - api
+      - db
     volumes:
       - saleor-traefik:/etc/traefik/acme
     ports:
       - "0.0.0.0:80:80"
       - "0.0.0.0:443:443"
+      - "0.0.0.0:5432:5432"
     networks:
       - saleor-backend-tier
 

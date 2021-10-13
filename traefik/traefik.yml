@@ -10,7 +10,7 @@ entryPoints:
     # https
     address: ":443"
 
-  db:
+  db-secure:
     address: ":5432"
 
 certificatesResolvers:
@@ -48,8 +48,11 @@ http:
     db-secure-router:
       rule: "Host(`saleor.mywheels.com.my`)"
       entryPoints:
-        - db
+        - db-secure
       service: db
+      tls:
+        # https://docs.traefik.io/master/routing/routers/#certresolver
+        certResolver: letsencrypt
 
   middlewares:
     redirect:
