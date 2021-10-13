@@ -72,7 +72,7 @@ http:
         servers:
           - url: http://api:8000
 
-    api:
+    db:
       loadBalancer:
         servers:
           - url: http://db:5432
