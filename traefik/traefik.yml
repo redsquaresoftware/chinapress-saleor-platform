@@ -5,6 +5,11 @@ entryPoints:
   web:
     # http
     address: ":80"
+    http:
+      # https://docs.traefik.io/routing/entrypoints/#entrypoint
+      redirections:
+        entryPoint:
+          to: web-secure
 
   web-secure:
     # https
@@ -17,7 +22,7 @@ certificatesResolvers:
   letsencrypt:
     # https://docs.traefik.io/master/https/acme/#lets-encrypt
     acme:
-      email: "cheewoei@redsquare.software"
+      email: "nick@redsquare.software"
       storage: /etc/traefik/acme/acme.json
       # https://docs.traefik.io/master/https/acme/#httpchallenge
       httpChallenge:
@@ -26,7 +31,7 @@ certificatesResolvers:
 http:
   routers:
     web-router:
-      rule: "Host(`saleor.mywheels.com.my`)"
+      rule: "Host(`saleor.mywheels.my`)"
       entryPoints:
         - web
       middlewares:
@@ -35,7 +40,7 @@ http:
       service: api
 
     web-secure-router:
-      rule: "Host(`saleor.mywheels.com.my`)"
+      rule: "Host(`saleor.mywheels.my`)"
       entryPoints:
         - web-secure
       middlewares:
@@ -46,7 +51,7 @@ http:
         certResolver: letsencrypt
 
     db-secure-router:
-      rule: "Host(`saleor.mywheels.com.my`)"
+      rule: "Host(`saleor.mywheels.my`)"
       entryPoints:
         - db-secure
       service: db
