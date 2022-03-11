@@ -26,7 +26,7 @@ certificatesResolvers:
 http:
   routers:
     web-router:
-      rule: "Host(`saleor.mywheels.com.my`)"
+      rule: "Host(`saleor.api.mywheels.my`)"
       entryPoints:
         - web
       middlewares:
@@ -35,7 +35,7 @@ http:
       service: api
 
     web-secure-router:
-      rule: "Host(`saleor.mywheels.com.my`)"
+      rule: "Host(`saleor.api.mywheels.my`)"
       entryPoints:
         - web-secure
       middlewares:
@@ -46,7 +46,7 @@ http:
         certResolver: letsencrypt
 
     db-secure-router:
-      rule: "Host(`saleor.mywheels.com.my`)"
+      rule: "Host(`saleor.api.mywheels.my`)"
       entryPoints:
         - db-secure
       service: db
