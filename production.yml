@@ -22,7 +22,7 @@ services:
       - ./saleor/tests/:/app/tests
       # shared volume between worker and api for media
       - saleor-media:/app/media
-    command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn --bind :8000 --workers 4 --worker-class uvicorn.workers.UvicornWorker saleor.asgi:application
     env_file: common.env
     environment:
       - JAEGER_AGENT_HOST=jaeger
@@ -32,18 +32,19 @@ services:
   # storefront:
   #   build:
   #     context: ./saleor-storefront
-  #     dockerfile: ./Dockerfile.dev
+  #     dockerfile: ./Dockerfile
+  #   ports:
+  #     - 3000:3000
   #   restart: unless-stopped
-  #   network_mode: "host"
   #   volumes:
   #     - ./saleor-storefront/:/app:cached
   #     - /app/node_modules/
-  #   command: npm start
+  #   command: npm start -- --host 0.0.0.0
 
   # dashboard:
   #   build:
   #     context: ./saleor-dashboard
-  #     dockerfile: ./Dockerfile.dev
+  #     dockerfile: ./Dockerfile
   #   ports:
   #     - 9000:9000
   #   restart: unless-stopped
@@ -55,7 +56,7 @@ services:
   db:
     image: library/postgres:11.1-alpine
     ports:
-      - 5432:5432
+      - "5432:5432"
     restart: unless-stopped
     networks:
       - saleor-backend-tier
@@ -118,12 +119,28 @@ services:
     networks:
       - saleor-backend-tier
 
+  traefik:
+    build:
+      context: ./traefik/production
+      dockerfile: ./Dockerfile
+    depends_on:
+      - api
+      - db
+    volumes:
+      - saleor-traefik:/etc/traefik/acme
+    ports:
+      - "0.0.0.0:80:80"
+      - "0.0.0.0:443:443"
+    networks:
+      - saleor-backend-tier
+
 volumes:
   saleor-db:
     driver: local
   saleor-redis:
     driver: local
-  saleor-media:
+  saleor-media: {}
+  saleor-traefik: {}
 
 networks:
   saleor-backend-tier:

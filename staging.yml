@@ -121,7 +121,7 @@ services:
 
   traefik:
     build:
-      context: ./traefik
+      context: ./traefik/staging
       dockerfile: ./Dockerfile
     depends_on:
       - api
