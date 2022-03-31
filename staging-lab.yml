@@ -128,7 +128,9 @@ services:
     # command: ./meilisearch --master-key=masterKey --no-analytics=true
     command: ./meilisearch --no-analytics=true
     volumes:
-      - staging_lab_meilisearch:/data.ms 
+      - staging_lab_meilisearch:/data.ms
+    networks:
+      - saleor-backend-tier
 
   traefik:
     build:
