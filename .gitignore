@@ -1,3 +1,4 @@
 .python-version
 .env
 .DS_Store
+traefik.yml
