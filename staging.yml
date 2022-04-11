@@ -134,7 +134,7 @@ services:
 
   traefik:
     build:
-      context: ./compose/staging/traefik
+      context: ./compose/staging/traefik/
       dockerfile: ./Dockerfile
     depends_on:
       - api
@@ -146,6 +146,8 @@ services:
       - "0.0.0.0:80:80"
       - "0.0.0.0:443:443"
       - "0.0.0.0:7700:7700"
+    labels:
+      - "traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=250000000"
     networks:
       - saleor-backend-tier
 
