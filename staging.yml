@@ -134,8 +134,8 @@ services:
 
   traefik:
     build:
-      context: .
-      dockerfile: ./compose/staging/traefik/Dockerfile
+      context: ./compose/staging/traefik
+      dockerfile: ./Dockerfile
     depends_on:
       - api
       - db
