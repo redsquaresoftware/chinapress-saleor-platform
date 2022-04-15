@@ -134,11 +134,12 @@ services:
 
   traefik:
     build:
-      context: ./traefik/production
+      context: ./compose/production/traefik/
       dockerfile: ./Dockerfile
     depends_on:
       - api
       - db
+      - meilisearch
     volumes:
       - saleor-traefik:/etc/traefik/acme
     ports:
