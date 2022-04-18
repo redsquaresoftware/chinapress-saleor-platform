@@ -119,19 +119,6 @@ services:
     networks:
       - saleor-backend-tier
 
-  meilisearch:
-    build:
-      context: .
-      dockerfile: ./compose/production/meilisearch/Dockerfile
-    image: cp_car_world_production_meilisearch
-    container_name: meilisearch
-    # command: ./meilisearch --master-key=masterKey --no-analytics=true
-    command: ./meilisearch --no-analytics=true
-    volumes:
-      - production_meilisearch:/data.ms
-    networks:
-      - saleor-backend-tier
-
   traefik:
     build:
       context: ./compose/production/traefik/
@@ -139,13 +126,11 @@ services:
     depends_on:
       - api
       - db
-      - meilisearch
     volumes:
       - saleor-traefik:/etc/traefik/acme
     ports:
       - "0.0.0.0:80:80"
       - "0.0.0.0:443:443"
-      - "0.0.0.0:7700:7700"
     networks:
       - saleor-backend-tier
 
@@ -156,7 +141,6 @@ volumes:
     driver: local
   saleor-media: {}
   saleor-traefik: {}
-  production_meilisearch: {}
 
 networks:
   saleor-backend-tier:
